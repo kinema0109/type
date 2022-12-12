@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 import { IOrder } from "./order.interface";
 
@@ -11,7 +10,8 @@ const orderSchema = new mongoose.Schema<IOrder>({
     }      
     ,
     userID:{
-        type:ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Users'
     }
     ,
     order:{
@@ -23,7 +23,7 @@ const orderSchema = new mongoose.Schema<IOrder>({
     ,
     timestamp:Date
     ,
-    Price:{
+    price:{
         type:Number,
         required:true
     }

@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const express = require("express");
 const dotenv = require('dotenv');
 const {config} = require('./config/config');
-const UserRoutes = require('./module/user/user.routes');
-const OrderRoutes = require('./module/order/order.routes');
+const routes = require('./routing/routes');
 const morgan = require('morgan');
 const app = express();
 dotenv.config();
@@ -24,5 +23,4 @@ app.listen(port,()=>{
     console.log("listening on http://localhost " + port);
 
 })
-UserRoutes(app);
-OrderRoutes(app);
+routes(app);

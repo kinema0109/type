@@ -5,8 +5,9 @@ function routes (app:Express ){
         res.status(200).json('hello there')
     })
    
-    app.get('/api/order',orderController.getToken);
-
-
+    app.get('/api/order/token',orderController.getToken);
+    app.post('/api/order',orderController.addOrder);
+    app.get('/api/order',orderController.getAllOrder);
+    app.get('/api/order/:id',orderController.filterOrder);
 }
 module.exports = routes

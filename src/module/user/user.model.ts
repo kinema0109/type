@@ -1,8 +1,5 @@
 import mongoose, { Mongoose } from "mongoose";
 import { IUser } from "./user.interface";
-
-
-
 const userSchema = new mongoose.Schema<IUser>({
     username:{
         type:String,
@@ -18,10 +15,13 @@ const userSchema = new mongoose.Schema<IUser>({
         require:true
     }
     ,
-   
+    orderID:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Orders'
+    }
     }
    
 )
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model('Users',userSchema);
 module.exports = User;

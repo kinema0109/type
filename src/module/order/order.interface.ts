@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import mongoose from "mongoose";
 export interface IOrder{
     contact:{
         adrress:String,
@@ -8,7 +8,8 @@ export interface IOrder{
     }      
     ,
     userID:{
-        type:ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
+      
     }
     ,
     order:{
@@ -20,5 +21,5 @@ export interface IOrder{
     ,
     timestamp:Date
     ,
-    Price:Number,
+    price:Number,
 }

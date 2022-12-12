@@ -63,39 +63,8 @@ const userController={
         const {password,...other} =req.body
          return res.status(200).json({
             ...other,token
-         })}
-        //  User.find({"name":user.name}).exec().then(user =>{
-        //     bcrypt.compare(user.password,user[0].password,(error,result)=>{
-        //         if(error){  
-        //             console.log("loi 1");
-        //             return res.status(401).json({
-        //                 message:'Unauthorized', 
-                        
-        //             })
-        //         }else if(result){  
-            //         signJWT(user1,user[0],(error,token)=>{
-            //             console.log(user[0]);
-            //             console.log(user1);
-            //             if(error){
-            //                 console.log("loi 2");
-            //             return res.status(401).json({
-            //                 message:'Unauthorized',
-            //                 error
-            //             })
-            //         }
-            //         else if (token){
-            //         return res.status(200).json({
-            //             message:'auth successful',
-            //             token,
-            //             user:user[0]
-            //         });
-            //     }
-            // })
-            
+         })}       
         }
-    // });
-    //      });
-    // }
 ,
     getAllUser:async(req: Request, res: Response)=>{
         const users = await User.find()
