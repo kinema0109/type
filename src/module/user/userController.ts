@@ -13,7 +13,6 @@ const userController={
     ,
    addUser:async(req: Request, res: Response)=>{
     const {name,password,username} = new User(req.body);
-    
     if (!name || !password|| !username){
         return res.status(400).json('all fields are required')
     }
@@ -31,20 +30,14 @@ const userController={
         name,
         password:hash}
         );
-        return saveuser.save()
-        .then(user =>{
-            return res.status(201).json(saveuser)
-        })
+        saveuser.save()
+        return res.status(201).json(saveuser)  
     })
-   
 }
 ,
     login: async(req: Request, res: Response)=>{
-     
         const finduser = await User.findOne({"name":req.body.name}).exec()
-  
         const validPassword = await bcrypt.compare(req.body.password,finduser.password)
-        
         console.log(validPassword);
         
         if(!finduser){
@@ -53,16 +46,28 @@ const userController={
         else if(!validPassword){
            return res.status(500).json("check lai mat khau")
         }
-        else{
+       else {
             const token=jwt.sign({
-            id:req.body._id,
+            id:req.body.id,
             username:req.body.name
-        },
-        config.token.tokenSecret,
+        }
+        ,
+        config.token.tokenSecret as string,
         {expiresIn:"1d"})
+        const refreshToken =jwt.sign({
+            id:req.body.id,
+            username:req.body.name },
+            config.token.tokenSecret as string,
+            {expiresIn:"365d"}
+        )
+      
+        console.log(finduser.refreshToken);
+        if (finduser.refreshToken ===undefined){
+        finduser.refreshToken = refreshToken
+        finduser.save()}
         const {password,...other} =req.body
          return res.status(200).json({
-            ...other,token
+            ...other,token,refreshToken
          })}       
         }
 ,
@@ -72,6 +77,30 @@ const userController={
             return res.status(400).json('No user found')
         }
         res.status(200).json(users)
+    }
+,
+    getAUser:async(req: Request, res: Response)=>{
+        const user = await User.findById(req.params.id)
+        if(!user){
+            return res.status(400).json('No user found')
+        }
+        res.status(200).json(user)
+    }
+,
+    UpdateUser:async(req: Request, res: Response)=>{
+        const updateuser = await User.findById(req.params.id)
+        await updateuser.updateOne({$set: req.body})
+        // const duplicate = await User.findOne({"username":updateuser.username}).lean().exec()
+        // if (duplicate&&duplicate?._id.toString()!==updateuser.id){
+        //     return res.status(409).json('duplicated user')
+        // }
+        res.status(200).json(updateuser.username+ " updated successfully")
+    }
+    ,
+    deleteUser:async(req: Request, res: Response)=>{
+        const deleteuser = await User.findByIdAndDelete(req.params.id)
+        res.status(200).json("deleted successfully")
+
     }
 }
 module.exports = userController;

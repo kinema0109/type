@@ -1,10 +1,14 @@
-import { log } from 'console';
 import * as jwt from 'jsonwebtoken';
 import {Response,Request}from 'express';
 import { extractJWT } from '../../middleware/extractJWT';
 const Order = require('./order.model');
 const User = require('../user/user.model');
 import { config } from '../../config/config';
+const FCM = require('fcm-node');
+interface JwtPayload {
+    username: string
+  }
+
 const orderController ={
     getToken:async(req:Request, res:Response)=>{
         console.log(extractJWT);
@@ -12,19 +16,18 @@ const orderController ={
         res.status(200).send('hello')
     }
     ,
-    addOrder:async(req:Request, res:Response)=>{
-        const token = req.headers.authorization?.split(' ')[1];
-        if(token){
-        const validate = jwt.verify(token,config.token.tokenSecret)
+    addOrder:async(req:Request, res:Response,next)=>{
+        const token = req.headers.authorization?.split(' ')[1];       
+        if(token){    
+        const validate = await jwt.verify(token,config.token.tokenSecret as string) as JwtPayload
         const user = await User.findOne({"name":validate.username});
         console.log(user._id);
         const neworder = new Order(req.body);
         const saveorder = await neworder.save()
         if(neworder){
             const order = await User.findById(user._id)
-            console.log(order);
             await saveorder.updateOne({$push:{userID:order._id}})
-            return res.status(200).send(saveorder)
+            return res.status(200).json("success")
         }
     }
     return res.status(400).json('login first')

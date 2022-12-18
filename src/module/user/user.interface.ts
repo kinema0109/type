@@ -4,4 +4,5 @@ export interface IUser{
     password:String;
     name:String;
     orderID:mongoose.Schema.Types.ObjectId,
+    refreshToken:String
     }
