@@ -31,8 +31,9 @@ function routes (app:Express ){
     }else {return res.status(400).json('fail')}
 })
     app.get('/api/order/token',orderController.getToken);
-    app.post('/api/order',orderController.addOrder);
+    app.post('/api/addorder',extractJWT.verifyToken,orderController.addOrder);
     app.get('/api/order',orderController.getAllOrder);
-    app.get('/api/order/:id',orderController.filterOrder);
+    app.get('/api/getorder/:id',orderController.filterOrder);
+    app.post('/api/border',orderController.getA);
 }
 module.exports = routes

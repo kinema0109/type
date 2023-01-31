@@ -15,10 +15,10 @@ const orderSchema = new mongoose.Schema<IOrder>({
     }
     ,
     order:{
-        Cheese:Number,
-        Salad:Number,
-        Bacon:Number,
-        Meat:Number
+        cheese:Number,
+        salad:Number,
+        bacon:Number,
+        meat:Number
     }
     ,
     timestamp:Date

@@ -3,7 +3,7 @@ const express = require("express");
 const dotenv = require('dotenv');
 const {config} = require('./config/config');
 const routes = require('./routing/routes');
-
+const cors = require('cors')
 const morgan = require('morgan');
 const app = express();
 dotenv.config();
@@ -18,6 +18,7 @@ app.get("/",(req,res)=>{
     return res.send("hello world!");
 })
 const port =8000;
+app.use(cors())
 app.listen(port,()=>{
     console.log("listening on http://localhost " + port);
 })

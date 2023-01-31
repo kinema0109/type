@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from "mongoose";
 import { IUser } from "./user.interface";
 const userSchema = new mongoose.Schema<IUser>({
+   
     username:{
         type:String,
         require:true
@@ -14,6 +15,8 @@ const userSchema = new mongoose.Schema<IUser>({
         type:String,
         require:true
     }
+    ,
+    DeviceID:[String]
     ,
     orderID:{
         type:mongoose.Schema.Types.ObjectId,

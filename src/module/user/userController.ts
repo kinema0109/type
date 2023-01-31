@@ -16,7 +16,7 @@ const userController={
     if (!name || !password|| !username){
         return res.status(400).json('all fields are required')
     }
-    const duplicate = await User.findOne({"name":name}).lean().exec()
+    const duplicate = await User.findOne({"username":username}).lean().exec()
     if (duplicate){
         return res.status(409).json('duplicated user')
     }
@@ -28,7 +28,8 @@ const userController={
         _id:new mongoose.Types.ObjectId(),
         username,
         name,
-        password:hash}
+        password:hash
+        }
         );
         saveuser.save()
         return res.status(201).json(saveuser)  
@@ -36,7 +37,8 @@ const userController={
 }
 ,
     login: async(req: Request, res: Response)=>{
-        const finduser = await User.findOne({"name":req.body.name}).exec()
+        const finduser = await User.findOne({"username":req.body.username}).exec()
+        console.log(finduser)
         const validPassword = await bcrypt.compare(req.body.password,finduser.password)
         console.log(validPassword);
         
@@ -48,26 +50,26 @@ const userController={
         }
        else {
             const token=jwt.sign({
-            id:req.body.id,
-            username:req.body.name
+            id:finduser._id,
+            username:req.body.username
         }
         ,
         config.token.tokenSecret as string,
         {expiresIn:"1d"})
+        console.log(token);
         const refreshToken =jwt.sign({
-            id:req.body.id,
-            username:req.body.name },
+            id:finduser._id,
+            username:req.body.username },
             config.token.tokenSecret as string,
             {expiresIn:"365d"}
         )
-      
-        console.log(finduser.refreshToken);
         if (finduser.refreshToken ===undefined){
         finduser.refreshToken = refreshToken
         finduser.save()}
         const {password,...other} =req.body
+        const id = finduser._id
          return res.status(200).json({
-            ...other,token,refreshToken
+            ...other,token,refreshToken,id
          })}       
         }
 ,
@@ -80,7 +82,7 @@ const userController={
     }
 ,
     getAUser:async(req: Request, res: Response)=>{
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(req.params.id)    
         if(!user){
             return res.status(400).json('No user found')
         }

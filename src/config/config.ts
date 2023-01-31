@@ -15,8 +15,8 @@ export const config={
     },
     token:{
         expiretime:SERVER_TOKEN_EXPIRETIME,
-        token:SERVER_TOKEN,
-        tokenSecret:SERVER_TOKEN_SECRET
+        token:SERVER_TOKEN as String,
+        tokenSecret:SERVER_TOKEN_SECRET as String
     }
     ,default:{
         saltWorkFactor:10

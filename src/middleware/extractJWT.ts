@@ -6,9 +6,8 @@ export const extractJWT  = {
 
 verifyToken: async(req:Request,res:Response,next:NextFunction) => {
 
-    let token = req.headers.authorization?.split(' ')[1];
+    const token= req.header('authorization');
     if(token){
-    
         jwt.verify(token,config.token.tokenSecret as string,(error,decoded)=>{
              if(error){
                 return res.status(404).json({

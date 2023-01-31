@@ -1,8 +1,8 @@
-export interface ISubscription extends Document {
-    endpoint: string;
-    expirationTime?: number;
-    keys: {
-      auth: string;
-      p256dh: string;
-    }
+export interface ISubscription {
+  endpoint: string;
+  expirationTime?: number;
+  keys: {
+    auth: string;
+    p256dh: string;
   }
+}
